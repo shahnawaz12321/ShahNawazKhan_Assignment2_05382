@@ -1,0 +1,66 @@
+div#container {height:615px;width:1350px;}
+div.snake {
+width: 50px;
+height:50px;
+position:fixed;
+    top:700px;
+    left:600px;
+}
+div.bird {
+width: 50px;
+height:50px;
+position:fixed;
+    top:700px;
+    left:600px;
+}
+div.lizard{
+width: 50px;
+height:50px;
+position:fixed;
+    top:700px;
+    left:600px;
+}
+
+p.Timer {
+	font-family: Verdana;
+	color: #ffff00;
+	font-size: 30px;
+	
+}
+
+div.lizard2{
+width: 50px;
+height:50px;
+position:fixed;
+    top:700px;
+    left:600px;
+}
+
+
+#egg {
+	height: 100px;
+	width: 78px;
+	position: absolute;
+	top: 250px;
+	left: 30px;
+
+}
+
+#grass {
+overflow: hidden;
+width: 1350px;
+height: 615px;
+background: url(grass.jpg) repeat-y;
+-webkit-animation: backgroundScroll 10s linear infinite;
+animation: backgroundScroll 10s linear infinite;
+}
+ 
+@-webkit-keyframes backgroundScroll {
+from {background-position: 0 0;}
+to {background-position: -400px 0;}
+}
+ 
+@keyframes backgroundScroll {
+from {background-position: 0 0;}
+to {background-position: -400px 0;}
+}

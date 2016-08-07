@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title> Assignment 2 | The Egg. </title>
+	<link rel="stylesheet" type="text/css" href="egg_style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+<script>
+    function collision($div1, $div2) {		//function to check for collisions between the egg and enemies. The game is over if they do collide.
+      var x1 = $div1.offset().left;
+      var y1 = $div1.offset().top;
+      var h1 = $div1.outerHeight(true);
+      var w1 = $div1.outerWidth(true);
+      var b1 = y1 + h1;
+      var r1 = x1 + w1;
+      var x2 = $div2.offset().left;
+      var y2 = $div2.offset().top;
+      var h2 = $div2.outerHeight(true);
+      var w2 = $div2.outerWidth(true);
+      var b2 = y2 + h2;
+      var r2 = x2 + w2;
+        
+      if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+      window.alert("They got you! Score: " + start)
+	  window.location.replace("game_over.html");	
+	  ;
+    }
+
+(function($) {							//functions to make the enemies move randomly accross the screen.
+
+  $.fn.randomizeBlocks = function() {
+    return this.each(function() {
+            animateDiv($(this));
+    });
+  };
+
+  function makeNewPosition($container) {
+      var h = $container.height() - 10;
+      var w = $container.width() - 10;
+
+      var nh = Math.floor(Math.random() * h);
+      var nw = Math.floor(Math.random() * w);
+
+      return [nh, nw];
+
+  }
+
+  function animateDiv($target) {
+      var newq = makeNewPosition($target.parent());
+      var oldq = $target.offset();
+      var speed = calcSpeed([oldq.top, oldq.left], newq);
+
+      $target.animate({
+          top: newq[0],
+          left: newq[1]
+      }, speed, function() {
+          animateDiv($target);
+      });
+
+  };
+
+  function calcSpeed(prev, next) {
+
+      var x = Math.abs(prev[1] - next[1]);
+      var y = Math.abs(prev[0] - next[0]);
+
+      var greatest = x > y ? x : y;
+
+      var speedModifier = 0.3;						//Use this to change the speed of the enemies. The higher, the faster.
+
+      var speed = Math.ceil(greatest / speedModifier);
+
+      return speed;
+
+  }
+
+}( jQuery ));
+
+function move_down(){				//function to make the egg move back to its original position after it jumps.
+	$('img#egg').stop().animate({
+		top: '+=100'
+	});
+}
+
+var start = 0;
+
+setInterval(function() {							//Game Timer. Also acts as a score count. The longer you can survive, the better you are!
+    $('.Timer').text((start++) + " Seconds");
+}, 1000);
+
+	
+
+$(document).ready(function(){
+
+
+
+/*function to make the egg move back to its orginal position after it ducks. Made this but later
+removed it since playing with this function was very annoying and almost unplayable.*/
+/*function move_up(){					
+	$('img#egg').stop().animate({
+		top: '-=100'
+	});
+}*/
+
+
+$('.rand').randomizeBlocks();
+$(document).keydown(function(e) {
+    switch (e.which) {
+    case 37: //left arrow key
+        $('img#egg').stop().animate({
+            left: '-=100'
+        }); 
+        break;
+    case 38: //up arrow key
+        $('img#egg').stop().animate({
+            top: '-=200'
+        }); 
+		setTimeout(move_down, 200);
+		break;
+    case 39: //right arrow key
+        $('img#egg').stop().animate({
+            left: '+=100'
+        }); 
+        break;
+    case 40: //bottom arrow key
+        $('img#egg').stop().animate({
+            top: '+=200'
+        }); 
+        break;
+    }
+	
+	
+});
+
+window.setInterval(function() {										//loops constantly checking for collisions.
+    $(window).text(collision($('.snake'), $('img#egg')));
+}, 10);
+window.setInterval(function() {
+    $(window).text(collision($('.bird'), $('img#egg')));
+}, 10);
+window.setInterval(function() {
+    $(window).text(collision($('.lizard'), $('img#egg')));
+}, 10);
+window.setInterval(function() {
+    $(window).text(collision($('.lizard2'), $('img#egg')));
+}, 10);
+});
+
+</script>
+<audio src = "background.mp3" autoplay loop></audio>		<!--background music. From the game, Undertale. -->
+<div id = "grass">
+<p class = "Timer"></p>
+<img src= "egg.png" id = "egg">
+<div id = "container">
+<div class="snake rand"><img src= "snake.png" height=70px; width=70px></div>
+<div class="bird rand"><img src= "bird.png" height=70px; width=70px></div>
+<div class="lizard rand"><img src= "lizard.png" height=70px; width=70px></div>
+<div class="lizard2 rand"><img src= "lizard2.png" height=70px; width=70px></div>
+</div>
+</div>
+</body>
